@@ -10,35 +10,53 @@ public class PlayerQuestWindow : MonoBehaviour
     [SerializeField] private GameObject questWindow;
     [SerializeField] private Button questSummaryButton;
 
-    public static PlayerQuestWindow Instance;
+    private static PlayerQuestWindow instance;
+
+    public static PlayerQuestWindow Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlayerQuestWindow>();
+                if (instance == null)
+                {
+                    GameObject singletonObj = new GameObject("PlayerQuestWindow");
+                    instance = singletonObj.AddComponent<PlayerQuestWindow>();
+                }
+                
+                DontDestroyOnLoad(instance);
+            }
+
+            return instance;
+        }
+        
+    }
     
 
-    private List<Quest_My> questList;
+    public List<Quest_My> questList { get; private set; }
     private Dictionary<Quest_My, Button> button_ByQuest;
     private LinkedList<Button> buttonLocation;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            questList = new List<Quest_My>(10);
-            button_ByQuest = new Dictionary<Quest_My, Button>();
-            buttonLocation = new LinkedList<Button>();
-                
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
         }
-        
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        questList = new List<Quest_My>(10);
+        buttonLocation = new LinkedList<Button>();
+        button_ByQuest = new Dictionary<Quest_My, Button>();
     }
 
     // Update is called once per frame

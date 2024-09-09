@@ -10,7 +10,20 @@ using UnityEngine;
 /// </summary>
 public class ItemPool : MonoBehaviour
 {
-    public static ItemPool Instance;
+    private static ItemPool instance;
+    
+    public static ItemPool Instance
+    { 
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<ItemPool>();
+                DontDestroyOnLoad(instance);
+            }
+            return instance;
+        }
+    }
 
     public Item_My[] itemArray { get; private set; }
     public Dictionary<Item_My, string> ItemNameEngToKor { get; set; }
@@ -19,6 +32,25 @@ public class ItemPool : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            
+            itemArray = new Item_My[capacity];
+            ItemArrayUpdate();
+            ItemNameEngToKor = new Dictionary<Item_My, string>();
+            
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+    
+    /*private void Awake()
+    {
+        
         if (Instance == null)
         {
             Instance = this;
@@ -30,10 +62,13 @@ public class ItemPool : MonoBehaviour
         }
         else
         {
-            Debug.Log("Critical Error: ItemPool");
+            for (int i = 0; i < capacity; i++)
+            {
+                Debug.Log(itemArray[i].KoreanName);
+            }
         }
 
-    }
+    }*/
 
     /*
     // Start is called before the first frame update

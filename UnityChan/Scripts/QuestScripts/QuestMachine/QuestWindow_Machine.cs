@@ -102,7 +102,7 @@ public class QuestWindow_Machine : MonoBehaviour
                 questWindow.SetActive(false);
                 questDetailWindow.SetActive(false);
             }
-
+            CharacterInput.Instance.Input_Block = false;
             CanActive = false;
         }
     }

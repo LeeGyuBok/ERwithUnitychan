@@ -242,7 +242,7 @@ public class Inventory_NoUse : MonoBehaviour
      public void SynchronizeItem(int InventorySpaceNumber, int itemCode)
     {
         //가지고 있는 아이템 데이터의 배열에 아이템을 넣는다.
-        /*Item_My[]#1#InventoryData[InventorySpaceNumber-1] = ItemPool.Instance.DropItem(itemCode);
+        /*Item_My[]#1#InventoryData[InventorySpaceNumber-1] = ItemPool.instance.DropItem(itemCode);
         Item_My item = InventoryData[InventorySpaceNumber - 1];
         Button targetButton = InventorySpace[InventorySpaceNumber];
         

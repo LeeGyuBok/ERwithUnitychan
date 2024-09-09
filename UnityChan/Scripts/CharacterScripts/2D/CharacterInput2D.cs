@@ -23,7 +23,7 @@ public class CharacterInput2D : MonoBehaviour
             _characterInput = this;
         
         else if (_characterInput != this)
-            throw new UnityException($"wrong Instance {_characterInput.name}.");
+            throw new UnityException($"wrong instance {_characterInput.name}.");
     }
     
     

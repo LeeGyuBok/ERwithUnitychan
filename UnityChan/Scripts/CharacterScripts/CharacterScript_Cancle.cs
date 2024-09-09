@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterScript : MonoBehaviour
@@ -14,7 +15,7 @@ public class CharacterScript : MonoBehaviour
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float decelerationFactor;
 
-    [SerializeField] private CharacterInput characterInput;
+    [FormerlySerializedAs("characterInputScripts")] [SerializeField] private CharacterInput characterInput;
     /*
     [SerializeField] private float currentSpeed;*/
 

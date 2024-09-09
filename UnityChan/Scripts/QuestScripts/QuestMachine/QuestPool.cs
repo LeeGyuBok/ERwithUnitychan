@@ -35,7 +35,7 @@ public class QuestPool : MonoBehaviour
         {
             if (quest != null)
             {
-                QuestWindow_Machine.Instance.PlayerQuestListContinueUpdate(quest);        
+                QuestWindow_Machine.instance.PlayerQuestListContinueUpdate(quest);        
             }
             else
             {

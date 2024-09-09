@@ -8,7 +8,7 @@ public class Character_Controller : MonoBehaviour
 {
     //컴포넌트들
     //플레이어의 입력을 받는 스크립트
-    private CharacterInput characterInput;
+    private CharacterInput _characterInput;
     private Rigidbody characterRigidbody;
     
     //애니메이터
@@ -20,7 +20,7 @@ public class Character_Controller : MonoBehaviour
     //플레이어가 입력한 값이 유효한지?
     private bool IsMoveInput
     {
-        get { return !Mathf.Approximately(characterInput.MoveInput.sqrMagnitude, 0f); }
+        get { return !Mathf.Approximately(_characterInput.MoveInput.sqrMagnitude, 0f); }
     }
     
     
@@ -62,7 +62,7 @@ public class Character_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        characterInput = CharacterInput.Instance;
+        _characterInput = CharacterInput.Instance;
     }
 
     // Update is called once per frame
@@ -82,7 +82,7 @@ public class Character_Controller : MonoBehaviour
     {
         //Debug.Log(IsMoveInput);
         //wasd를 눌러 이동명령을 받는다.
-        Vector2 moveInput = characterInput.MoveInput;
+        Vector2 moveInput = _characterInput.MoveInput;
         //카메라기준 이동벡터 형성
         Vector3 lookForward = new Vector3(cameraLocation.forward.x, 0f, cameraLocation.forward.z).normalized;
         Vector3 lookRight = new Vector3(cameraLocation.right.x, 0f, cameraLocation.right.z).normalized;
@@ -136,7 +136,7 @@ public class Character_Controller : MonoBehaviour
         {
             //walk
             characterRigidbody.velocity = Vector3.Lerp(characterRigidbody.velocity, moveDirection * moveSpeed, Time.fixedDeltaTime*moveSpeed);
-            bool isRun = characterInput.IsRun;
+            bool isRun = _characterInput.IsRun;
             //Debug.Log(isRun + "CharController");
             //run, when player press leftShift
             if (isRun)
@@ -169,10 +169,10 @@ public class Character_Controller : MonoBehaviour
     
     void Look()
     {
-        if (!CharacterInput.Instance.Input_Block)
+        if (!_characterInput.Input_Block)
         {
             //우리가 보는 화면은 2차원 평면이다. 마우스는 평면안에 있기 때문에, 그 위치를 좌표평면상에 나타낼 수 있다.
-            Vector2 mouseDelta = characterInput.CameraInput;
+            Vector2 mouseDelta = _characterInput.CameraInput;
         
             //쿼터니언을 오일러각으로 변환하여 x,y,z축에 대한 회전으로 분해하여 표현.
             //카메라포지션의 현재 회전을 오일러각으로 변환하여 저장.

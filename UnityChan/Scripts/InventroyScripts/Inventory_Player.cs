@@ -1,19 +1,44 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Inventory_Player : MonoBehaviour
 {
     //오직 하나!
-    public static Inventory_Player Instance;
+    private static Inventory_Player instance;
+
+    public static Inventory_Player Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<Inventory_Player>();
+                
+                if (instance == null)
+                {
+                    GameObject singletonObj = new GameObject("Inventory_Player");
+                    instance = singletonObj.AddComponent<Inventory_Player>();
+                }
+                
+                DontDestroyOnLoad(instance);
+            }
+
+            return instance;
+        }
+    }
     
     //인벤토리 패널
     [SerializeField] private GameObject InventoryPanel;
     //아이템 디테일 패널
     [SerializeField] private GameObject ItemDetailPanel;
+    
+    
     
     //Ui용 버튼
     private Button[] InventorySpace;
@@ -32,13 +57,14 @@ public class Inventory_Player : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance != null && instance != this)
         {
-            Instance = this;
+            Destroy(gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -72,6 +98,7 @@ public class Inventory_Player : MonoBehaviour
             }
         }
         InventorySpace = InventoryPanel.GetComponentsInChildren<Button>();
+        InventorySpace[0].onClick.AddListener(Switch);
         
         Inventory = new Dictionary<Button, Stack<Item_My>>();
         
@@ -81,6 +108,8 @@ public class Inventory_Player : MonoBehaviour
             currentButton.onClick.AddListener(() => InventorySpaceClick(currentButton));
             currentButton.gameObject.AddComponent<MouseHover>();//마우스 호버시 정보 출력 위한 스크립트
         }
+        
+        
     }
 
     // Update is called once per frame
@@ -116,7 +145,7 @@ public class Inventory_Player : MonoBehaviour
     /// </summary>
     /// <param name="inventorySpaceNumber"></param>
     /// <returns></returns>
-    public Button UpdateInventory(int inventorySpaceNumber)
+    private Button UpdateInventory(int inventorySpaceNumber)
     {
         //Debug.Log(InventorySpace.Length);
         //여기서 에러가 발생했다면, InventoryPanel에 Inventory_Player오브젝트가 할당되었는지 확인하세요
@@ -143,7 +172,7 @@ public class Inventory_Player : MonoBehaviour
     /// Update Quantity in Inventory.
     /// </summary>
     /// <param name="currentInventorySpace"></param>
-    public void UpdateItemQuantity(Button currentInventorySpace)
+    private void UpdateItemQuantity(Button currentInventorySpace)
     {
         TextMeshProUGUI itemQuantity = currentInventorySpace.GetComponentInChildren<TextMeshProUGUI>();
         Item_My item = Inventory[currentInventorySpace].Peek();
@@ -154,8 +183,13 @@ public class Inventory_Player : MonoBehaviour
             itemQuantity.text = "";
             return;
         }
-        itemQuantity.text = $"{Inventory[currentInventorySpace].Count}"; 
-        PlayerQuestWindow.Instance.QuestStatusCheck();
+        itemQuantity.text = $"{Inventory[currentInventorySpace].Count}";
+        //수락한 퀘스트가 있는 경우에만 체크. List.Any() -> 리스트가 비어있는지 확인. 요소가 있으면 true 없으면 false
+        if (!PlayerQuestWindow.Instance.questList.Equals(null))
+        {
+            PlayerQuestWindow.Instance.QuestStatusCheck();    
+        }
+        
     }
 
     public void GetItem(Item_My item)

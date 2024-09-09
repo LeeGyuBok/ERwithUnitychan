@@ -19,6 +19,12 @@ public class Interaction : MonoBehaviour
 
     // Start is called before the first frame update
 
+    private void Awake()
+    {
+        //Debug.Log(GameObject.Find("UserInterface").transform.GetChild(2).name);
+        interactionButton = GameObject.Find("UserInterface").transform.GetChild(2).gameObject;
+    }
+
     private void Update()
     {
         if (PlayerContact)
@@ -29,7 +35,7 @@ public class Interaction : MonoBehaviour
                 {
                     Item_My dropItem = ItemPool.Instance.DropItem(ItemCode);
                     //Debug.Log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                    /*Inventory_NoUse.Instance.GetItem(dropItem);*/
+                    /*Inventory_NoUse.instance.GetItem(dropItem);*/
                     Inventory_Player.Instance.GetItem(dropItem);
                     StartCoroutine(Cooldown());    
                 }
@@ -39,15 +45,18 @@ public class Interaction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        ContactObject = other.gameObject;
-        /*Debug.Log("contact");*/
-        if (CanAction)
+        Debug.Log(other.tag);
+        if (other.gameObject.CompareTag("Player"))
         {
-            if (ContactObject.TryGetComponent(out IPossibleInteraction  possibleInteraction))
+            /*Debug.Log("contact");*/
+            if (CanAction)
             {
-                ItemCode = possibleInteraction.ItemCode;
-                PlayerContact = true;
-                interactionButton.SetActive(PlayerContact);
+                if (gameObject.TryGetComponent(out IPossibleInteraction  possibleInteraction))
+                {
+                    ItemCode = possibleInteraction.ItemCode;
+                    PlayerContact = true;
+                    interactionButton.SetActive(PlayerContact);
+                }
             }
         }
     }
@@ -58,9 +67,14 @@ public class Interaction : MonoBehaviour
         {
             return;
         }*/
-        PlayerContact = false;
-        interactionButton.SetActive(PlayerContact);
-        ContactObject = null;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            PlayerContact = false;
+            interactionButton.SetActive(PlayerContact);
+            ContactObject = null;
+        }
+
+        
     }
     
        private IEnumerator Cooldown()
