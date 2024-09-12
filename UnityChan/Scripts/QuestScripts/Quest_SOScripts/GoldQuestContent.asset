@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf00324fc43e6524ba64efaa10091700, type: 3}
+  m_Name: GoldQuestContent
+  m_EditorClassIdentifier: 
+  title: "\uAE08 \uAD6C\uD558\uAE30"
+  reward: "\uCE5C\uBC00\uB3C4(\uC911)"
+  target: ItemPool.Instance.itemArray[5].KoreanName;
+  targetGoalCount: 6
+  questStringContent: "\uC5EC\uAE30\uC788\uB294 \uB140\uC11D\uB4E4\uC758 \uB300\uBD80\uBD84\uC740
+    \uBA38\uB9AC\uAC00 \uC774\uC0C1\uD574. \\n\uAE08\uC744 \uC5EC\uAE30\uC800\uAE30
+    \uBFCC\uB9AC\uACE0 \uB2E4\uB2CC\uB2E4\uB2C8\uAE4C? \uB3C8 \uC544\uAE4C\uC6B4
+    \uC904 \\n\uBAA8\uB978\uB2E8 \uB9D0\uC774\uC9C0? \uADF8\uB798\uC11C \uB9D0\uC778\uB370,
+    \uADF8 \uAE08 \uC880 \uAC00\uC838\uC640\uB77C."

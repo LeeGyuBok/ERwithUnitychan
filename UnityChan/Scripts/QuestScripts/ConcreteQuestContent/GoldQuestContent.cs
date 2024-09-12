@@ -6,6 +6,8 @@ public class GoldQuestContent : QuestContent
 {
     public static QuestContent goldQuest { get; }= new GoldQuestContent();
 
+    public Quest_SO contents;
+
     private GoldQuestContent()
     {
         Title = "금 구하기";

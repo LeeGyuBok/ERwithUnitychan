@@ -7,10 +7,13 @@ public class QuestStateBox : MonoBehaviour
 {
     public static QuestStateBox Instance;
     
+    [SerializeField] private List<Quest_SO> questDatas;
     
     public List<Quest_My> DeclineQuestList { get; private set; }
     public List<Quest_My> ContinueQuestList { get; private set; }
     public List<Quest_My> CompleteQuestList { get; private set; }
+    
+    public List<QuestContent_SO> DeclineQuestList_SO { get; private set; }
     private void Awake()
     {
         if (Instance == null)
@@ -19,6 +22,7 @@ public class QuestStateBox : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             DeclineQuestList = new List<Quest_My>();
+            DeclineQuestList_SO = new List<QuestContent_SO>();
             ContinueQuestList = new List<Quest_My>();
             CompleteQuestList = new List<Quest_My>();
         }
@@ -32,8 +36,7 @@ public class QuestStateBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DeclineQuestList.Add(new Quest_My(NpcPool.Instance.ShowNpc("Hyunwoo"), QuestContentPool.Instance.QuestContents[0], false, false));
-        DeclineQuestList.Add(new Quest_My(NpcPool.Instance.ShowNpc("Darko"), QuestContentPool.Instance.QuestContents[1], false, false));
+        InitializeDeclineQuestList();
         
         foreach (var quest in DeclineQuestList)
         {
@@ -47,12 +50,6 @@ public class QuestStateBox : MonoBehaviour
             }
         }
     }
-
-    /*// Update is called once per frame
-    void Update()
-    {
-        
-    }*/
     
 
     // 퀘스트 상태에 따른 미수락 퀘스트리스트 업데이트하기
@@ -127,6 +124,24 @@ public class QuestStateBox : MonoBehaviour
         foreach (Quest_My quest in questsToRemove)
         {
             ContinueQuestList.Remove(quest);
+        }
+    }
+
+    private void InitializeDeclineQuestList()
+    {
+        DeclineQuestList.Add(new Quest_My(NpcPool.Instance.ShowNpc("Hyunwoo"), QuestContentPool.Instance.QuestContents[0], false, false));
+        DeclineQuestList.Add(new Quest_My(NpcPool.Instance.ShowNpc("Darko"), QuestContentPool.Instance.QuestContents[1], false, false));
+
+        for (int i = 0; i < questDatas.Count; i++)
+        {
+            QuestContent_SO quest = new QuestContent_SO(questDatas[i], questDatas[i].Title);
+            DeclineQuestList_SO.Add(quest);
+            Debug.Log(quest.contents.Title);
+            Debug.Log(quest.contents.Target);
+            Debug.Log(quest.contents.TargetGoalCount);
+            Debug.Log(quest.contents.Reward);
+            Debug.Log($"내용: {quest.QuestDetail}");
+
         }
     }
 }
