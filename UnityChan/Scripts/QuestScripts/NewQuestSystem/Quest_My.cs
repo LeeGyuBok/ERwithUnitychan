@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum QuestStatus
-{
-    Complete,
-    Continue,
-    Decline
-}
+
 public class Quest_My
 {
     public Npc NPC { get; private set; }

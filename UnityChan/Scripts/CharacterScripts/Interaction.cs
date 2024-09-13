@@ -33,7 +33,7 @@ public class Interaction : MonoBehaviour
             {
                 if (CanAction)
                 {
-                    Item_My dropItem = ItemPool.Instance.DropItem(ItemCode);
+                    Item_SO dropItem = ItemManager_SO.Instance.GetItem(ItemCode);
                     //Debug.Log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
                     /*Inventory_NoUse.instance.GetItem(dropItem);*/
                     Inventory_Player.Instance.GetItem(dropItem);

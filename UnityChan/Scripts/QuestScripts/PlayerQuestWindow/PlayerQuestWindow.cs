@@ -34,8 +34,8 @@ public class PlayerQuestWindow : MonoBehaviour
     }
     
 
-    public List<Quest_My> questList { get; private set; }
-    private Dictionary<Quest_My, Button> button_ByQuest;
+    public List<QuestContent_SO> questList { get; private set; }
+    private Dictionary<QuestContent_SO, Button> button_ByQuest;
     private LinkedList<Button> buttonLocation;
 
     private void Awake()
@@ -54,9 +54,9 @@ public class PlayerQuestWindow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        questList = new List<Quest_My>(10);
+        questList = new List<QuestContent_SO>(10);
         buttonLocation = new LinkedList<Button>();
-        button_ByQuest = new Dictionary<Quest_My, Button>();
+        button_ByQuest = new Dictionary<QuestContent_SO, Button>();
     }
 
     // Update is called once per frame
@@ -76,7 +76,7 @@ public class PlayerQuestWindow : MonoBehaviour
     //퀘스트 머신으로부터 퀘스트를 수락하는 로직이 필요함.
     //퀘스트 머신은 퀘스트 스테이트박스에 있는 디클라인 리스트를 받아옴.
     //그럼 플레이어퀘스트윈도우는 수락한 퀘스트만 나타나야함. -> 컨티뉴퀘스트리스트
-    public void PlayerQuestListContinueUpdate(Quest_My quest)
+    public void PlayerQuestListContinueUpdate(QuestContent_SO quest)
     {
         if (questList.Contains(quest))
         {
@@ -106,7 +106,7 @@ public class PlayerQuestWindow : MonoBehaviour
         SummaryButtonInfoUpdate(quest);
     }
 
-    public void PlayerQuestListDeclineUpdate(Quest_My quest)
+    public void PlayerQuestListDeclineUpdate(QuestContent_SO quest)
     {
         if (button_ByQuest[quest] != null)
         {
@@ -124,7 +124,7 @@ public class PlayerQuestWindow : MonoBehaviour
         }
     }
 
-    private void SummaryButtonInfoUpdate(Quest_My quest)
+    private void SummaryButtonInfoUpdate(QuestContent_SO quest)
     {
         if (button_ByQuest[quest] != null)
         {
@@ -132,19 +132,19 @@ public class PlayerQuestWindow : MonoBehaviour
             GameObject title = targetButton.transform.Find("Title/TXT").gameObject;
             if (title.TryGetComponent(out TextMeshProUGUI titleTxt))
             {
-                titleTxt.text = quest.QuestContents.Title;
+                titleTxt.text = quest.Contents.Title;
             }
 
             GameObject objective = targetButton.transform.Find("TargetItem/TXT").gameObject;
             if (objective.TryGetComponent(out TextMeshProUGUI objectiveTxt))
             {
-                objectiveTxt.text = quest.QuestContents.Objective;
+                objectiveTxt.text = quest.Contents.Target;
             }
 
             GameObject count = targetButton.transform.Find("Count/TXT").gameObject;
             if (count.TryGetComponent(out TextMeshProUGUI countTxt))
             {
-                countTxt.text = $"{quest.QuestContents.PlayerCollectCount} / {quest.QuestContents.ObjectiveGoalCount}";
+                countTxt.text = $"{quest.PlayerCollectCount} / {quest.Contents.TargetGoalCount}";
             }
         }
     }
@@ -176,34 +176,34 @@ public class PlayerQuestWindow : MonoBehaviour
         for (int i = 0; i < Inventory_Player.Instance.InventoryData.Length; i++)
         {
             //인벤토리내의 데이터관리하는 배열(스택들로 이루어짐)에서 아이템 가지고옴(Peek)
-            Item_My item = Inventory_Player.Instance.InventoryData[i].Peek();
+            Item_SO item = Inventory_Player.Instance.InventoryData[i].Peek();
             //가지고온 아이템이 빈칸이거나 막힘이 아니면
-            if (!item.ItemId.Equals(EnumItemCode.Blank.ToString()) || !item.ItemId.Equals(EnumItemCode.Blocked.ToString()))
+            if (!item.data.ItemID.Equals(EnumItemCode.Blank.ToString()) || !item.data.ItemID.Equals(EnumItemCode.Blocked.ToString()))
             {
                 //내가 수락한 퀘스트리스트의 퀘스트로 가서
-                foreach (Quest_My quest in questList)
+                foreach (QuestContent_SO quest in questList)
                 {
                     //그 퀘스트의 오브젝티브와 비교한다.
-                    if (quest.QuestContents.Objective.Equals(item.KoreanName))//만약 같은 아이템이면
+                    if (quest.Contents.Target.Equals(item.data.KoreanName))//만약 같은 아이템이면
                     {
                         //지역변수생성해서 그 아이템의 개수 넣고
                         int itemEA = Inventory_Player.Instance.InventoryData[i].Count;
                         
                         //플레이어가 모은 아이템 개수에 넣는다.
-                        quest.QuestContents.PlayerCollectCount = itemEA;
+                        quest.PlayerCollectCount = itemEA;
                         
                         //퀘스트창 업데이트 준비
                         GameObject count = button_ByQuest[quest].transform.Find("Count/TXT").gameObject;
                         if (count.TryGetComponent(out TextMeshProUGUI countTxt))
                         {
                             //만약, 플레이어가 모은 아이템 개수가 퀘스트가 요구하는 개수보다 적으면
-                            if (itemEA < quest.QuestContents.ObjectiveGoalCount)
+                            if (itemEA < quest.Contents.TargetGoalCount)
                             {
-                                countTxt.text = $"{quest.QuestContents.PlayerCollectCount} / {quest.QuestContents.ObjectiveGoalCount}";
+                                countTxt.text = $"{quest.PlayerCollectCount} / {quest.Contents.TargetGoalCount}";
                             }
                             else
                             {
-                                countTxt.text = $"{quest.QuestContents.ObjectiveGoalCount} / {quest.QuestContents.ObjectiveGoalCount}";
+                                countTxt.text = $"{quest.Contents.TargetGoalCount} / {quest.Contents.TargetGoalCount}";
                             }
                         }
                     }

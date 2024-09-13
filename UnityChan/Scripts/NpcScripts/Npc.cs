@@ -12,9 +12,14 @@ public class Npc : IQuest
     public Npc(string name, int friendShip)
     {
         Name = name;
+        int underscoreIndex = Name.IndexOf('_');
+        if (underscoreIndex != -1)
+        {
+            Name = Name.Substring(underscoreIndex + 1);
+        }
         questArray = new Quest_My[10];
         FriendShip = friendShip;
-        SDCharacterIcon = Resources.Load<Sprite>($"NPC/OriginPlayable/{name}");
+        SDCharacterIcon = Resources.Load<Sprite>($"NPC/OriginPlayable/{name}");   
         /*Debug.Log(SDCharacterIcon.name);*/
     }
 

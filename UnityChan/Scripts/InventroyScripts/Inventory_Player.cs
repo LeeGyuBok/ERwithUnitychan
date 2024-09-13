@@ -47,13 +47,13 @@ public class Inventory_Player : MonoBehaviour
     private int inventoryDataCapacity = 16;
     
     //Ui용 버튼과 실제 데이터를 연결함
-    private Dictionary<Button, Stack<Item_My>> Inventory;
+    private Dictionary<Button, Stack<Item_SO>> Inventory;
     
     /*실제 데이터
     인벤토리내의 아이템 수량을 포함한 실제 인벤토리
     인벤토리내의 아이템과 그 수량을 나타내는 인벤토리 한 칸*/
-    public Stack<Item_My>[] InventoryData { get; private set; }
-    public Stack<Item_My> InventoryDataQuantity{ get; private set; }
+    public Stack<Item_SO>[] InventoryData { get; private set; }
+    public Stack<Item_SO> InventoryDataQuantity{ get; private set; }
 
     private void Awake()
     {
@@ -72,7 +72,7 @@ public class Inventory_Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InventoryData = new Stack<Item_My>[inventoryDataCapacity];
+        InventoryData = new Stack<Item_SO>[inventoryDataCapacity];
         //초기 셋팅 빈칸 8개, 막힌 칸 8개
         for (int i = 0; i < inventoryDataCapacity; i++)
         {
@@ -83,8 +83,8 @@ public class Inventory_Player : MonoBehaviour
                 /*아이템 타입의 스택을 만들고
                  Blank를 넣어준 뒤
                  인벤토리에 넣어준다.*/
-                InventoryDataQuantity = new Stack<Item_My>(1);
-                InventoryDataQuantity.Push(ItemPool.Instance.DropItem(0));
+                InventoryDataQuantity = new Stack<Item_SO>(1);
+                InventoryDataQuantity.Push(ItemManager_SO.Instance.GetItem(0));
                 InventoryData[i] = InventoryDataQuantity;
             }
             else
@@ -92,15 +92,15 @@ public class Inventory_Player : MonoBehaviour
                 /*아이템 타입의 스택을 만들고
                  Blocked를 넣어준 뒤
                  인벤토리에 넣어준다.*/
-                InventoryDataQuantity = new Stack<Item_My>(1);
-                InventoryDataQuantity.Push(ItemPool.Instance.DropItem(1));
+                InventoryDataQuantity = new Stack<Item_SO>(1);
+                InventoryDataQuantity.Push(ItemManager_SO.Instance.GetItem(1));
                 InventoryData[i] = InventoryDataQuantity;
             }
         }
         InventorySpace = InventoryPanel.GetComponentsInChildren<Button>();
         InventorySpace[0].onClick.AddListener(Switch);
         
-        Inventory = new Dictionary<Button, Stack<Item_My>>();
+        Inventory = new Dictionary<Button, Stack<Item_SO>>();
         
         for (int i = 0; i < inventoryDataCapacity; i++)
         {
@@ -150,7 +150,7 @@ public class Inventory_Player : MonoBehaviour
         //Debug.Log(InventorySpace.Length);
         //여기서 에러가 발생했다면, InventoryPanel에 Inventory_Player오브젝트가 할당되었는지 확인하세요
         Button currentInventorySpace = InventorySpace[inventorySpaceNumber + 1];
-        Stack<Item_My> currentItemStack = InventoryData[inventorySpaceNumber];
+        Stack<Item_SO> currentItemStack = InventoryData[inventorySpaceNumber];
         Inventory[currentInventorySpace] = currentItemStack;
         UpdateItemImage(currentInventorySpace);
         UpdateItemQuantity(currentInventorySpace);
@@ -169,16 +169,16 @@ public class Inventory_Player : MonoBehaviour
         /*Image inventorySpaceImage = currentInventorySpace.GetComponent<Image>();*/
     }
     /// <summary>
-    /// Update Quantity in Inventory.
+    /// Update DropQuantity in Inventory.
     /// </summary>
     /// <param name="currentInventorySpace"></param>
     private void UpdateItemQuantity(Button currentInventorySpace)
     {
         TextMeshProUGUI itemQuantity = currentInventorySpace.GetComponentInChildren<TextMeshProUGUI>();
-        Item_My item = Inventory[currentInventorySpace].Peek();
+        Item_SO item = Inventory[currentInventorySpace].Peek();
         /*Debug.Log($"{Inventory[currentInventorySpace].Count} + {Inventory[currentInventorySpace].Peek().Name}");*/
-        if (Inventory[currentInventorySpace].Count == item.BasicQuantity 
-            && Inventory[currentInventorySpace].Count == item.MaxQuantity)//MaxQ == BasicQ == Quantity == 1
+        if (Inventory[currentInventorySpace].Count == item.data.DropQuantity 
+            && Inventory[currentInventorySpace].Count == item.data.DropQuantity)//MaxQ == BasicQ == DropQuantity == 1
         {
             itemQuantity.text = "";
             return;
@@ -192,22 +192,22 @@ public class Inventory_Player : MonoBehaviour
         
     }
 
-    public void GetItem(Item_My item)
+    public void GetItem(Item_SO item)
     {
         for (int i = 0; i < InventoryData.Length; i++)//인벤토리 내부순회
         {
             if (EnterInventory_Blank(item, i, out var currentItem)) return;//일단 넣으면 순환할 필요 없음.
 
-            if (currentItem.Name.Equals(item.Name))//같은 아이템인 경우
+            if (currentItem.data.Name.Equals(item.data.Name))//같은 아이템인 경우
             {
                 //같은 아이템인데 Quantity가 MaxQuantity보다 작은 경우
-                if (InventoryData[i].Count < item.MaxQuantity)
+                if (InventoryData[i].Count < item.data.MaxQuantity)
                 {
-                    for (int j = 0; j < item.BasicQuantity; j++)
+                    for (int j = 0; j < item.data.DropQuantity; j++)
                     {
                         InventoryData[i].Push(item); //일단 넣어
                         UpdateItemQuantity(InventorySpace[i + 1]); //수량만 변화
-                        if (InventoryData[i].Count > item.MaxQuantity) //100 > 99 가 되버린 경우. 그냥 아이템 버린다.
+                        if (InventoryData[i].Count > item.data.MaxQuantity) //100 > 99 가 되버린 경우. 그냥 아이템 버린다.
                         {
                             InventoryData[i].Pop();
                             UpdateItemQuantity(InventorySpace[i + 1]);
@@ -221,10 +221,10 @@ public class Inventory_Player : MonoBehaviour
                 return;
             }
             //만약 98개야. 100개가 되면 위 if문 조건절을 만족하지 않아서 바로 내려옴 그럼 다음칸은? 블랭크야. 그럼 거기에 2개들어감
-            if (currentItem.Name.Equals(EnumItemCode.Blocked.ToString()))
+            if (currentItem.data.Name.Equals(EnumItemCode.Blocked.ToString()))
             {
                 Debug.Log("Blocked");
-                DestroyItem(item);
+                item = null;
                 return;
             }
         }
@@ -237,13 +237,13 @@ public class Inventory_Player : MonoBehaviour
     /// <param name="i">inventory space number</param>
     /// <param name="currentItem">item, already in inventory space number</param>
     /// <returns></returns>
-    private bool EnterInventory_Blank(Item_My item, int i, out Item_My currentItem)
+    private bool EnterInventory_Blank(Item_SO item, int i, out Item_SO currentItem)
     {
         currentItem = InventoryData[i].Peek();
-        if (currentItem.Name.Equals(EnumItemCode.Blank.ToString()))//비어있는 칸에 넣는 것
+        if (currentItem.data.Name.Equals(EnumItemCode.Blank.ToString()))//비어있는 칸에 넣는 것
         {
             InventoryData[i].Clear();
-            for (int j = 0; j < item.BasicQuantity; j++)
+            for (int j = 0; j < item.data.DropQuantity; j++)
             {
                 InventoryData[i].Push(item);    
             }
@@ -256,7 +256,7 @@ public class Inventory_Player : MonoBehaviour
 
     public void InventorySpaceClick(Button clickedButton)
     {
-        Debug.Log(Inventory[clickedButton].Peek().Name + " clicked!");
+        Debug.Log(Inventory[clickedButton].Peek().data.Name + " clicked!");
     }
     
     public void Switch()
@@ -277,18 +277,18 @@ public class Inventory_Player : MonoBehaviour
         {
             if (InventorySpace[i+1].name.Equals(buttonName))
             {
-                if (Inventory[InventorySpace[i+1]].Peek().Name.Equals(EnumItemCode.Blank.ToString())
-                    || Inventory[InventorySpace[i+1]].Peek().Name.Equals(EnumItemCode.Blocked.ToString()))
+                if (Inventory[InventorySpace[i+1]].Peek().data.Name.Equals(EnumItemCode.Blank.ToString())
+                    || Inventory[InventorySpace[i+1]].Peek().data.Name.Equals(EnumItemCode.Blocked.ToString()))
                 {
                     return;
                 }
-                Debug.Log($"{Inventory[InventorySpace[i+1]].Peek().Name} hovered!");
+                Debug.Log($"{Inventory[InventorySpace[i+1]].Peek().data.Name} hovered!");
                 Transform itemName = ItemDetailPanel.transform.Find("ItemName");
                 Transform itemDetail = ItemDetailPanel.transform.Find("ItemDetail");
                 TextMeshProUGUI itemKoreanName = itemName.GetComponent<TextMeshProUGUI>();
                 TextMeshProUGUI itemKoreanDetail = itemDetail.GetComponent<TextMeshProUGUI>();
-                itemKoreanName.text = $"{Inventory[InventorySpace[i+1]].Peek().KoreanName}";
-                itemKoreanDetail.text = $"{Inventory[InventorySpace[i + 1]].Peek().KoreanDetail}";
+                itemKoreanName.text = $"{Inventory[InventorySpace[i+1]].Peek().data.KoreanName}";
+                itemKoreanDetail.text = $"{Inventory[InventorySpace[i + 1]].Peek().data.KoreanName}";
                 ItemDetailPanel.SetActive(!ItemDetailPanel.activeSelf);
                 return;
             }

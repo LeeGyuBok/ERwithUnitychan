@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf00324fc43e6524ba64efaa10091700, type: 3}
-  m_Name: GoldQuestContent
+  m_Script: {fileID: 11500000, guid: b92c09ef5a7bf704d88c5575811f26c2, type: 3}
+  m_Name: Blank
   m_EditorClassIdentifier: 
-  title: "\uAE08 \uAD6C\uD558\uAE30"
-  reward: "\uCE5C\uBC00\uB3C4(\uC911)"
-  target: "\uAE08"
-  targetGoalCount: 6
+  name: Blank
+  koreanName: "\uBE44\uC5B4\uC788\uC74C"
+  itemID: 0
+  maxQuantity: 1
+  dropQuantity: 1

@@ -14,11 +14,11 @@ public class QuestWindow_Machine : MonoBehaviour
     [SerializeField] private Button questListButton;
     [SerializeField] private GameObject questDetailWindow;
     
-    private Quest_My[] DoingQuest { get; set; }
+    private QuestContent_SO[] DoingQuest { get; set; }
     
     private readonly int capacity = 10;
 
-    private Dictionary<Button, Quest_My> buttonByQuest;
+    private Dictionary<Button, QuestContent_SO> buttonByQuest;
 
     private Button[] questListButtons;
 
@@ -31,8 +31,8 @@ public class QuestWindow_Machine : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DoingQuest = new Quest_My[capacity];
-            buttonByQuest = new Dictionary<Button, Quest_My>();
+            DoingQuest = new QuestContent_SO[capacity];
+            buttonByQuest = new Dictionary<Button, QuestContent_SO>();
             questListButtons = new Button[capacity];
 
         }
@@ -107,7 +107,7 @@ public class QuestWindow_Machine : MonoBehaviour
         }
     }
 
-    public void QuestListUpdate(Quest_My questMy)
+    public void QuestListUpdate(QuestContent_SO questMy)
     {
         for (int i = 0; i < capacity; i++)
         {
@@ -141,7 +141,7 @@ public class QuestWindow_Machine : MonoBehaviour
                 GameObject titleText = questListButtons[i].transform.Find("Quest_Title/Title").gameObject;
                 if (titleText.TryGetComponent(out TextMeshProUGUI title))
                 {
-                    title.text = buttonByQuest[questListButtons[i]].QuestContents.Title;
+                    title.text = buttonByQuest[questListButtons[i]].Contents.Title;
                     /*Debug.Log("ListTitleUpdate");*/
                 }
                 GameObject npcText = questListButtons[i].transform.Find("Quest_NPC/NPC").gameObject;
@@ -183,7 +183,7 @@ public class QuestWindow_Machine : MonoBehaviour
     
     private void QuestDetailUpdate(Button clickedButton)
     {
-        Quest_My showingDetail = buttonByQuest[clickedButton];
+        QuestContent_SO showingDetail = buttonByQuest[clickedButton];
         //퀘스트머신 자체가 수주가능한 퀘스트의 리스트를 들고있어야할듯?
         //그리고 그 리스트에서 뽑은것들만 명단에 올리는 식으로
         GameObject npcIcon = questDetailWindow.transform.Find("NpcIcon").gameObject;
@@ -196,22 +196,22 @@ public class QuestWindow_Machine : MonoBehaviour
         GameObject titleText = questDetailWindow.transform.Find("QuestDetail_Title").gameObject;
         if (titleText.TryGetComponent(out TextMeshProUGUI title))
         {
-            title.text = $"퀘스트: {showingDetail.QuestContents.Title}";
+            title.text = $"퀘스트: {showingDetail.Contents.Title}";
         }
         GameObject targetText = questDetailWindow.transform.Find("QuestDetail_Target").gameObject;
         if (targetText.TryGetComponent(out TextMeshProUGUI target))
         {
-            target.text = $"목표: {showingDetail.QuestContents.Objective}, {showingDetail.QuestContents.ObjectiveGoalCount} 개";
+            target.text = $"목표: {showingDetail.Contents.Target}, {showingDetail.Contents.TargetGoalCount} 개";
         }
         GameObject rewardText = questDetailWindow.transform.Find("QuestDetail_Reward").gameObject;
         if (rewardText.TryGetComponent(out TextMeshProUGUI reward))
         {
-            reward.text = $"보상: {showingDetail.QuestContents.Reward}";/*SelectedQuest.Reward.ToString();*/
+            reward.text = $"보상: {showingDetail.Contents.Reward}";/*SelectedQuest.Reward.ToString();*/
         }
         GameObject contentText = questDetailWindow.transform.Find("QuestDetail_Content").gameObject;
         if (contentText.TryGetComponent(out TextMeshProUGUI content))
         {
-            content.text = showingDetail.QuestContents.QuestStringContent;
+            content.text = showingDetail.Contents.Title;
         }
     }
 
@@ -237,7 +237,7 @@ public class QuestWindow_Machine : MonoBehaviour
             buttonByQuest[ShowingDetail].QuestContinue();
             //최초에 퀘스트가 있던 리스트는 디클라인 퀘스트리스트.
             QuestStateBox.Instance.UpdateDeclineQuestList();
-            Debug.Log(QuestStateBox.Instance.DeclineQuestList.Count);
+            Debug.Log(QuestStateBox.Instance.DeclineQuestList_SO.Count);
             QuestMachineListUpdate();
             PlayerQuestWindow.Instance.PlayerQuestListContinueUpdate(buttonByQuest[ShowingDetail]);
             PlayerQuestWindow.Instance.QuestStatusCheck();
@@ -262,7 +262,7 @@ public class QuestWindow_Machine : MonoBehaviour
                 buttonByQuest[ShowingDetail].QuestDecline();
                 //컨티뉴 퀘스트리스트를 업데이트한다
                 QuestStateBox.Instance.UpdateContinueQuestList();
-                Debug.Log(QuestStateBox.Instance.ContinueQuestList.Count);
+                Debug.Log(QuestStateBox.Instance.ContinueQuestList_SO.Count);
                 //퀘스트머신리스트를 업데이트한다.
                 QuestMachineListUpdate();
                 PlayerQuestWindow.Instance.PlayerQuestListDeclineUpdate(buttonByQuest[ShowingDetail]);
