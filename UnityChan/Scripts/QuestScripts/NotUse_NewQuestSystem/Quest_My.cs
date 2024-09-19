@@ -1,33 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 
-public enum QuestStatus
+public class Quest_My
 {
-    Complete,
-    Continue,
-    Decline
-}
-
-
-public class QuestContent_SO
-{
-    //제목, 보상, 목표아이템, 아이템 요구 개수
-    public Quest_SO Contents { get; private set; }
-
-    public Npc NPC{ get; private set; }
+    public Npc NPC { get; private set; }
     
-    public int PlayerCollectCount { get; set; } = 0;
-    
+    public QuestContent QuestContents { get; private set; }
+    public bool Goal { get; private set; } = false;
+
     public QuestStatus Status {get; private set;} = QuestStatus.Decline;
+    public bool QuestEnd { get; private set; }  = false;
 
-    public QuestContent_SO(Quest_SO contents, Npc npc)
+    public Quest_My(Npc npc, QuestContent questContents, bool goal, bool questEnd)
     {
         NPC = npc;
-        Contents = contents;
+        QuestContents = questContents;
+        Goal = goal;
+        QuestEnd = questEnd;
     }
     
-        
     public void QuestDecline()
     {
         Status = QuestStatus.Decline;
@@ -40,5 +33,4 @@ public class QuestContent_SO
     {
         Status = QuestStatus.Continue;
     }
-
 }

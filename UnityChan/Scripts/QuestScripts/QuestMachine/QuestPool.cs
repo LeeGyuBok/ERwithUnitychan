@@ -28,8 +28,8 @@ public class QuestPool : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        possibleQuestArray[0] = new Quest_My(NpcPool.Instance.ShowNpc("Hyunwoo"), QuestContentPool.Instance.QuestContents[0], false, false);
-        possibleQuestArray[1] = new Quest_My(NpcPool.Instance.ShowNpc("Darko"), QuestContentPool.Instance.QuestContents[1], false, false);
+        possibleQuestArray[0] = new Quest_My(NpcPool.Instance.GetNpc(3), QuestContentPool.Instance.QuestContents[0], false, false);
+        possibleQuestArray[1] = new Quest_My(NpcPool.Instance.GetNpc(74), QuestContentPool.Instance.QuestContents[1], false, false);
         /*Debug.Log(possibleQuestArray[0].NPC.Name);//잘 나옴*/
         /*foreach (var quest in possibleQuestArray)
         {

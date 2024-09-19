@@ -23,8 +23,8 @@ public class NpcPool : MonoBehaviour
             npcArray = new Npc[capacity];
             for (int i = 0; i < capacity; i++)
             {
-                npcArray[i] = new Npc(sprites[i].name, 0);
-                Debug.Log(npcArray[i].Name);
+                npcArray[i] = new Npc(sprites[i].name, 0, i);
+                Debug.Log($"{npcArray[i].NpcCode}_{npcArray[i].Name}");
                 //75명의 Npc데이터 생성, 한국어 이름 x
             }
             /*Debug.Log("complete");*/
@@ -36,29 +36,8 @@ public class NpcPool : MonoBehaviour
         }
     }
 
-    /*
-    // Start is called before the first frame update
-    void Start()
+    public Npc GetNpc(int index)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }*/
-
-    public Npc ShowNpc(string name)
-    {
-        for (int i = 0; i < capacity; i++)
-        {
-            if (npcArray[i].Name.Equals(name))
-            {
-                SelectedNpc = npcArray[i]; 
-                break;
-            }
-        }
-        return SelectedNpc;
+        return npcArray[index];
     }
 }

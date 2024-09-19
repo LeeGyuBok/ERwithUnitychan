@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf00324fc43e6524ba64efaa10091700, type: 3}
-  m_Name: LeatherQuestContent
+  m_Name: VFBloodSampleQuestContent
   m_EditorClassIdentifier: 
-  npcCode: 3
-  title: "\uAC00\uC8FD \uAD6C\uD558\uAE30"
-  reward: "\uCE5C\uBC00\uB3C4(\uC18C)"
-  itemCode: 6
-  targetGoalCount: 3
-  questDetail: "\uB3D9\uBB3C\uB4E4\uC758 \uAC00\uC8FD, \uB2E8\uB2E8\uD558\uB358\uB370?
-    \uC880 \uAD6C\uD574\uB2E4\uC904 \uC218 \uC788\uACA0\uC5B4?"
+  npcCode: 42
+  title: "VF\uD608\uC561\uC0D8\uD50C \uAD6C\uD558\uAE30"
+  reward: "\uCE5C\uBC00\uB3C4(\uB300)"
+  itemCode: 8
+  targetGoalCount: 1
+  questDetail: "\uB0B4\uAC8C \uB9DB\uC788\uB294 \uD53C\uB97C \uB300\uB839\uD558\uAC70\uB77C!"

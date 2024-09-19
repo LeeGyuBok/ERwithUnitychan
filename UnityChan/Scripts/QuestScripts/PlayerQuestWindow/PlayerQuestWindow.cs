@@ -135,10 +135,11 @@ public class PlayerQuestWindow : MonoBehaviour
                 titleTxt.text = quest.Contents.Title;
             }
 
-            GameObject objective = targetButton.transform.Find("TargetItem/TXT").gameObject;
-            if (objective.TryGetComponent(out TextMeshProUGUI objectiveTxt))
+            GameObject target = targetButton.transform.Find("TargetItem/TXT").gameObject;
+            if (target.TryGetComponent(out TextMeshProUGUI objectiveTxt))
             {
-                objectiveTxt.text = quest.Contents.Target;
+                Item_SO targetItem = ItemManager_SO.Instance.GetItem(quest.Contents.ItemCode);
+                objectiveTxt.text = targetItem.data.KoreanName;
             }
 
             GameObject count = targetButton.transform.Find("Count/TXT").gameObject;
@@ -184,7 +185,7 @@ public class PlayerQuestWindow : MonoBehaviour
                 foreach (QuestContent_SO quest in questList)
                 {
                     //그 퀘스트의 오브젝티브와 비교한다.
-                    if (quest.Contents.Target.Equals(item.data.KoreanName))//만약 같은 아이템이면
+                    if (quest.Contents.ItemCode.Equals(item.data.KoreanName))//만약 같은 아이템이면
                     {
                         //지역변수생성해서 그 아이템의 개수 넣고
                         int itemEA = Inventory_Player.Instance.InventoryData[i].Count;

@@ -135,7 +135,8 @@ public class QuestWindow_Machine : MonoBehaviour
                 if (indexText.TryGetComponent(out TextMeshProUGUI index))
                 {
                     /*int i = Array.IndexOf(DoingQuest, questMy) + 1;*/
-                    index.text = Array.IndexOf(DoingQuest, buttonByQuest[questListButtons[i]]).ToString("D3"); 
+                    int questIndex = Array.IndexOf(DoingQuest, buttonByQuest[questListButtons[i]]) + 1;
+                    index.text = questIndex.ToString("D3"); 
                     /*Debug.Log("ListIndexUpdate");*/
                 }
                 GameObject titleText = questListButtons[i].transform.Find("Quest_Title/Title").gameObject;
@@ -201,7 +202,7 @@ public class QuestWindow_Machine : MonoBehaviour
         GameObject targetText = questDetailWindow.transform.Find("QuestDetail_Target").gameObject;
         if (targetText.TryGetComponent(out TextMeshProUGUI target))
         {
-            target.text = $"목표: {showingDetail.Contents.Target}, {showingDetail.Contents.TargetGoalCount} 개";
+            target.text = $"목표: {showingDetail.Contents.TargetGoalCount} 개";
         }
         GameObject rewardText = questDetailWindow.transform.Find("QuestDetail_Reward").gameObject;
         if (rewardText.TryGetComponent(out TextMeshProUGUI reward))
@@ -211,7 +212,7 @@ public class QuestWindow_Machine : MonoBehaviour
         GameObject contentText = questDetailWindow.transform.Find("QuestDetail_Content").gameObject;
         if (contentText.TryGetComponent(out TextMeshProUGUI content))
         {
-            content.text = showingDetail.Contents.Title;
+            content.text = showingDetail.Contents.QuestDetail;
         }
     }
 
