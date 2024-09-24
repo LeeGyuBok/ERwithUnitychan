@@ -176,10 +176,10 @@ public class Inventory_Player : MonoBehaviour
     {
         TextMeshProUGUI itemQuantity = currentInventorySpace.GetComponentInChildren<TextMeshProUGUI>();
         Item_SO item = Inventory[currentInventorySpace].Peek();
-        /*Debug.Log($"{Inventory[currentInventorySpace].Count} + {Inventory[currentInventorySpace].Peek().Name}");*/
-        if (Inventory[currentInventorySpace].Count == item.data.DropQuantity 
-            && Inventory[currentInventorySpace].Count == item.data.DropQuantity)//MaxQ == BasicQ == DropQuantity == 1
+        //아이템이 빈칸 또는 막혀있음 이면 
+        if (item.data.ItemID.Equals(0.ToString()) || item.data.ItemID.Equals(1.ToString()))
         {
+            //수량 표시 X
             itemQuantity.text = "";
             return;
         }

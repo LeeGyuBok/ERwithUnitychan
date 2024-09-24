@@ -143,7 +143,6 @@ public class QuestStateBox : MonoBehaviour
             Debug.Log(quest.Contents.TargetGoalCount);
             Debug.Log(quest.Contents.Reward);
             Debug.Log($"내용: {quest.Contents.QuestDetail}");
-
         }
     }
 }

@@ -22,6 +22,7 @@ public class Interaction : MonoBehaviour
     private void Awake()
     {
         //Debug.Log(GameObject.Find("UserInterface").transform.GetChild(2).name);
+        //유저인터페이스 게임오브젝트의 자식 오브젝트 3개중 가장 마지막이 인터액션버튼
         interactionButton = GameObject.Find("UserInterface").transform.GetChild(2).gameObject;
     }
 

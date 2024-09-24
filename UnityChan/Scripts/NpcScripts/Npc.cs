@@ -9,7 +9,7 @@ public class Npc : IQuest
     public string Name { get; private set; }
     public int FriendShip { get; private set; }
     public Sprite SDCharacterIcon { get; private set; }
-    public QuestBySo[] questArray { get; private set; }
+    public QuestContent_SO[] questArray { get; private set; }
     public Npc(string name, int friendShip, int code)
     {
         NpcCode = code;
@@ -19,7 +19,7 @@ public class Npc : IQuest
         {
             Name = Name.Substring(underscoreIndex + 1);
         }
-        questArray = new QuestBySo[10];
+        questArray = new QuestContent_SO[10];
         FriendShip = friendShip;
         SDCharacterIcon = Resources.Load<Sprite>($"NPC/OriginPlayable/{name}");   
         /*Debug.Log(SDCharacterIcon.name);*/
