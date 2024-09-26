@@ -35,4 +35,10 @@ public class ItemData_SO : ScriptableObject
     {
         get { return dropQuantity; }
     }
+    
+    [SerializeField] private string koreanDetail;
+    public string KoreanDetail
+    {
+        get { return koreanDetail; }
+    }
 }

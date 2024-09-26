@@ -25,21 +25,21 @@ public class Npc : IQuest
         /*Debug.Log(SDCharacterIcon.name);*/
     }
 
-    public Quest_My Decline(Quest_My quest)
+    public QuestContent_SO Decline(QuestContent_SO quest)
     {
         quest.QuestDecline();
         return quest;
     }
 
-    public Quest_My Continue(Quest_My quest)
+    public QuestContent_SO Continue(QuestContent_SO quest)
     {
-        quest.QuestContinue();
+        quest.QuestDecline();
         return quest;
     }
 
-    public Quest_My Complete(Quest_My quest)
+    public QuestContent_SO Complete(QuestContent_SO quest)
     {
-        quest.QuestComplete();
+        quest.QuestDecline();
         return quest;
     }
 }

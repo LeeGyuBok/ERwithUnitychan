@@ -173,44 +173,105 @@ public class PlayerQuestWindow : MonoBehaviour
         //일단 퀘스트는 아이템 수집이다. -> 아이템을 획득할 때 체크한다.
         //인벤토리를 순회하면서 아이템이름을 퀘스트리스트의 오브젝티브와 비교한다.
         
-        //인벤토리 크기만큼 순회할건데
-        for (int i = 0; i < Inventory_Player.Instance.InventoryData.Length; i++)
+        //퀘스트리스트(수락한 퀘스트들)의 각각의 퀘스트에 대해서
+        foreach (QuestContent_SO quest in questList)
+        {
+            //인벤토리 크기만큼 순회할건데
+            foreach (var inventoryItem in Inventory_Player.Instance.InventoryData)
+            {
+                Item_SO item = inventoryItem.Peek();
+                //인벤토리의 아이템이 퀘스트가 요구하는 아이템과 같다면
+                if (quest.Contents.ItemCode.ToString().Equals(item.data.ItemID))
+                {
+                    GameObject count = button_ByQuest[quest].transform.Find("Count/TXT").gameObject;
+                    if (count.TryGetComponent(out TextMeshProUGUI countTxt))
+                    {
+                        quest.PlayerCollectCount = inventoryItem.Count;
+                        if (item.data.MaxQuantity == 1)
+                        {
+                            int onlyOneItemTotalCount = 0;
+                            //여기서 재순회하므로 0으로 친다 ㅋㅋ;
+                            foreach (var inventoryItemOnlyOne in Inventory_Player.Instance.InventoryData)
+                            {
+                                if (item.data.ItemID.Equals(inventoryItemOnlyOne.Peek().data.ItemID))//현재 item에서 멈췄으니
+                                {
+                                    onlyOneItemTotalCount++;
+                                }
+                            }
+                            countTxt.text = $"{onlyOneItemTotalCount} / {quest.Contents.TargetGoalCount}";
+                        }
+                        else
+                        {
+                            countTxt.text = $"{quest.PlayerCollectCount} / {quest.Contents.TargetGoalCount}";    
+                        }
+                        
+                        
+                    }
+                    //완료여부를 체크한다.
+                    CompleteQuest(quest, inventoryItem.Count);
+                }
+            }
+        }
+        
+        
+        /*//폐기코드
+         * //인벤토리 크기만큼 순회할건데
+        foreach (var inventoryItem in Inventory_Player.Instance.InventoryData)
         {
             //인벤토리내의 데이터관리하는 배열(스택들로 이루어짐)에서 아이템 가지고옴(Peek)
-            Item_SO item = Inventory_Player.Instance.InventoryData[i].Peek();
+            Item_SO item = inventoryItem.Peek();
             //가지고온 아이템이 빈칸이거나 막힘이 아니면
             if (!item.data.ItemID.Equals(EnumItemCode.Blank.ToString()) || !item.data.ItemID.Equals(EnumItemCode.Blocked.ToString()))
             {
                 //내가 수락한 퀘스트리스트의 퀘스트로 가서
                 foreach (QuestContent_SO quest in questList)
                 {
-                    //그 퀘스트의 오브젝티브와 비교한다.
-                    if (quest.Contents.ItemCode.Equals(item.data.KoreanName))//만약 같은 아이템이면
+                    if (quest.Status == QuestStatus.Continue)//그 퀘스트의 상태가 진행중인지 확인한다. 진행중이면
                     {
-                        //지역변수생성해서 그 아이템의 개수 넣고
-                        int itemEA = Inventory_Player.Instance.InventoryData[i].Count;
-                        
-                        //플레이어가 모은 아이템 개수에 넣는다.
-                        quest.PlayerCollectCount = itemEA;
-                        
-                        //퀘스트창 업데이트 준비
-                        GameObject count = button_ByQuest[quest].transform.Find("Count/TXT").gameObject;
-                        if (count.TryGetComponent(out TextMeshProUGUI countTxt))
+                        //그 퀘스트의 목표 아이템과 비교한다.
+                        if (quest.Contents.ItemCode.ToString().Equals(item.data.ItemID))//만약 같은 아이템이면
                         {
-                            //만약, 플레이어가 모은 아이템 개수가 퀘스트가 요구하는 개수보다 적으면
-                            if (itemEA < quest.Contents.TargetGoalCount)
+                            //지역변수생성해서 그 아이템의 개수 넣고
+                            int itemQuantity = inventoryItem.Count;
+                        
+                            //플레이어가 모은 아이템 개수에 넣는다.
+                            quest.PlayerCollectCount = itemQuantity;
+                        
+                            //퀘스트창 업데이트 준비
+                            GameObject count = button_ByQuest[quest].transform.Find("Count/TXT").gameObject;
+                            if (count.TryGetComponent(out TextMeshProUGUI countTxt))
                             {
-                                countTxt.text = $"{quest.PlayerCollectCount} / {quest.Contents.TargetGoalCount}";
+                                //만약, 플레이어가 모은 아이템 개수가 퀘스트가 요구하는 개수보다 적으면
+                                if (itemQuantity < quest.Contents.TargetGoalCount)
+                                {
+                                    countTxt.text = $"{quest.PlayerCollectCount} / {quest.Contents.TargetGoalCount}";
+                                }
+                                else
+                                {
+                                    countTxt.text = $"{quest.Contents.TargetGoalCount} / {quest.Contents.TargetGoalCount}";
+                                }
                             }
-                            else
+                            //완료여부를 체크한다.
+                            CompleteQuest(quest, itemQuantity);
+                            if (quest.Status == QuestStatus.Complete)
                             {
-                                countTxt.text = $"{quest.Contents.TargetGoalCount} / {quest.Contents.TargetGoalCount}";
+                                return;
                             }
                         }
+                        //다른아이템이면 다음 퀘스트를 확인한다.
                     }
                 }
+                
             }
             return;
+        }*/
+    }
+
+    private void CompleteQuest(QuestContent_SO quest, int itemQuantity)
+    {
+        if (quest.Contents.TargetGoalCount == itemQuantity)
+        {
+            quest.QuestComplete();
         }
     }
 }

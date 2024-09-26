@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf00324fc43e6524ba64efaa10091700, type: 3}
+  m_Name: LeatherQuestContent
+  m_EditorClassIdentifier: 
+  npcCode: 3
+  title: "\uAC00\uC8FD \uAD6C\uD558\uAE30"
+  reward: "\uCE5C\uBC00\uB3C4(\uC18C)"
+  itemCode: 6
+  targetGoalCount: 3
+  questDetail: "\uB3D9\uBB3C\uB4E4\uC758 \uAC00\uC8FD, \uB2E8\uB2E8\uD558\uB358\uB370?
+    \uC880 \uAD6C\uD574\uB2E4\uC904 \uC218 \uC788\uACA0\uC5B4?"

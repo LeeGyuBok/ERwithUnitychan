@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IQuest
 {
-    public Quest_My Decline(Quest_My quest);
-    public Quest_My Continue(Quest_My quest);
-    public Quest_My Complete(Quest_My quest);
+    public QuestContent_SO Decline(QuestContent_SO quest);
+    public QuestContent_SO Continue(QuestContent_SO quest);
+    public QuestContent_SO Complete(QuestContent_SO quest);
 }

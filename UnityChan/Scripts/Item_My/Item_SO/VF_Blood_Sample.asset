@@ -17,3 +17,5 @@ MonoBehaviour:
   itemID: 8
   maxQuantity: 1
   dropQuantity: 1
+  koreanDetail: "\uC2E4\uD5D8\uC6A9 \uD608\uC561\uC774\uB2E4. \uBB3C\uB860 \uC2E4\uD5D8\uCCB4\uC5D0\uAC8C\uC11C\uB3C4
+    \uC5BB\uC744 \uC218 \uC788\uB294\uB370... \uC774\uAC8C \uB3C4\uB300\uCCB4 \uC65C..?"

@@ -288,7 +288,7 @@ public class Inventory_Player : MonoBehaviour
                 TextMeshProUGUI itemKoreanName = itemName.GetComponent<TextMeshProUGUI>();
                 TextMeshProUGUI itemKoreanDetail = itemDetail.GetComponent<TextMeshProUGUI>();
                 itemKoreanName.text = $"{Inventory[InventorySpace[i+1]].Peek().data.KoreanName}";
-                itemKoreanDetail.text = $"{Inventory[InventorySpace[i + 1]].Peek().data.KoreanName}";
+                itemKoreanDetail.text = $"{Inventory[InventorySpace[i + 1]].Peek().data.KoreanDetail}";
                 ItemDetailPanel.SetActive(!ItemDetailPanel.activeSelf);
                 return;
             }
@@ -302,5 +302,19 @@ public class Inventory_Player : MonoBehaviour
         {
             ItemDetailPanel.SetActive(!ItemDetailPanel.activeSelf);    
         }
+    }
+
+    public (bool, string, int) SearchItem(string itemCode)
+    {
+        (bool, string, int) isItemExist = (false, "itemCode", 0/*itemQuantity*/);
+        for (int i = 0; i < inventoryDataCapacity; i++)
+        {
+            if (InventoryData[i].Peek().data.ItemID.Equals(itemCode))
+            {
+                isItemExist = (true, InventoryData[i].Peek().data.ItemID, InventoryData[i].Count);
+                return isItemExist;
+            }
+        }
+        return isItemExist = (false, "None", 0);
     }
 }

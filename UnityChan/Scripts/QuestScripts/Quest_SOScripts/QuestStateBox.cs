@@ -12,7 +12,6 @@ public class QuestStateBox : MonoBehaviour
     [SerializeField] private List<Quest_SO> questDatas;
     public List<QuestContent_SO> ContinueQuestList_SO { get; private set; }
     public List<QuestContent_SO> CompleteQuestList_SO { get; private set; }
-    
     public List<QuestContent_SO> DeclineQuestList_SO { get; private set; }
     private void Awake()
     {
@@ -144,5 +143,16 @@ public class QuestStateBox : MonoBehaviour
             Debug.Log(quest.Contents.Reward);
             Debug.Log($"내용: {quest.Contents.QuestDetail}");
         }
+    }
+
+    public void UpdatePlayerQuestWindowInfo(string itemCode)
+    {
+        (bool, string, int) inventoryInfo = Inventory_Player.Instance.SearchItem(itemCode);
+        if (inventoryInfo.Item1)
+        {
+            string code = inventoryInfo.Item2;
+            int quantity = inventoryInfo.Item3;
+        }
+        
     }
 }
